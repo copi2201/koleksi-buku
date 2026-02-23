@@ -15,9 +15,9 @@ class CheckRole
      */
     public function handle(Request $request, Closure $next, $role)
 {
-    // Cek apakah user sudah login DAN apakah rolenya sesuai dengan yang diminta route
+    
     if (!auth()->check() || auth()->user()->role !== $role) {
-        // Jika tidak sesuai, lempar ke halaman 403 (Forbidden)
+        
         abort(403, 'Hanya Admin yang boleh melakukan aksi ini!');
     }
     
