@@ -14,40 +14,53 @@
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title">Daftar Kategori Buku</h4>
+
                 <div class="mb-4">
                     <a href="{{ route('kategori.create') }}" class="btn btn-gradient-primary btn-icon-text">
-                        <i class="mdi mdi-plus btn-icon-prepend"></i> Tambah Kategori
+                        <i class="mdi mdi-plus btn-icon-prepend"></i>
+                        Tambah Kategori
                     </a>
                 </div>
+
                 <div class="table-responsive">
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th class="font-weight-bold"> No </th>
-                                <th class="font-weight-bold"> Nama Kategori </th>
-                                <th class="font-weight-bold text-center"> Aksi </th>
+                                <th class="font-weight-bold">No</th>
+                                <th class="font-weight-bold">Nama Kategori</th>
+                                <th class="font-weight-bold text-center">Aksi</th>
                             </tr>
                         </thead>
+
                         <tbody>
-                            @foreach ($kategori as $index => $k)
+                            @forelse($kategori as $key => $item)
                             <tr>
-                                <td> {{ $index + 1 }} </td>
-                                <td> {{ $k->nama_kategori }} </td>
+                                <td>{{ $key + 1 }}</td>
+
+                                <td>{{ $item->nama_kategori }}</td>
+
                                 <td class="text-center">
-                                    <form action="{{ route('kategori.destroy', $k->idkategori) }}" method="POST">
-                                        <a href="{{ route('kategori.edit', $k->idkategori) }}" class="btn btn-sm btn-warning text-white">
-                                            <i class="mdi mdi-pencil"></i> Edit
-                                        </a>
+                                    <form action="{{ route('kategori.destroy', $item->id) }}" method="POST" class="d-inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Yakin hapus?')">
-                                            <i class="mdi mdi-delete"></i> Hapus
+
+                                        <button type="submit"
+                                            class="btn btn-danger btn-sm"
+                                            onclick="return confirm('Yakin ingin menghapus kategori ini?')">
+                                            Hapus
                                         </button>
                                     </form>
                                 </td>
                             </tr>
-                            @endforeach
+                            @empty
+                            <tr>
+                                <td colspan="3" class="text-center">
+                                    Data kategori belum tersedia
+                                </td>
+                            </tr>
+                            @endforelse
                         </tbody>
+
                     </table>
                 </div>
             </div>

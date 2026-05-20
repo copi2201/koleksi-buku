@@ -9,27 +9,36 @@
     <div class="col-lg-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                {{-- Tombol Tambah hanya untuk Admin --}}
+
+                @if(session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
                 @if(Auth::user()->role == 'admin')
-                    <a href="{{ route('buku.create') }}" class="btn btn-gradient-primary mb-3">Tambah Buku</a>
+                    <a href="{{ route('buku.create') }}" class="btn btn-gradient-primary mb-3">
+                        Tambah Buku
+                    </a>
                 @endif
                 
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <th> No </th>
-                            <th> Kode </th>
-                            <th> Judul </th>
-                            <th> Pengarang </th>
-                            <th> Kategori </th>
-                            {{-- Kolom Aksi hanya muncul untuk Admin --}}
+                            <th>No</th>
+                            <th>Kode</th>
+                            <th>Judul</th>
+                            <th>Pengarang</th>
+                            <th>Kategori</th>
+
                             @if(Auth::user()->role == 'admin')
-                                <th> Aksi </th>
+                                <th>Aksi</th>
                             @endif
                         </tr>
                     </thead>
+
                     <tbody>
-                        @foreach($buku as $key => $b)
+                        @forelse($buku as $key => $b)
                         <tr>
                             <td>{{ $key + 1 }}</td>
                             <td>{{ $b->kode }}</td> 
@@ -37,24 +46,35 @@
                             <td>{{ $b->pengarang }}</td> 
                             <td>{{ $b->kategori->nama_kategori ?? 'Tanpa Kategori' }}</td> 
                             
-                            {{-- Logika Tombol Aksi --}}
                             @if(Auth::user()->role == 'admin')
                             <td>
-                                {{-- Tombol Edit --}}
-                                <a href="{{ route('buku.edit', $b->idbuku) }}" class="btn btn-sm btn-warning">Edit</a>
+                                <a href="{{ route('buku.edit', $b->id) }}" class="btn btn-sm btn-warning">
+                                    Edit
+                                </a>
                                 
-                                {{-- Form Hapus --}}
-                                <form action="{{ route('buku.destroy', $b->idbuku) }}" method="POST" style="display:inline;">
+                                <form action="{{ route('buku.destroy', $b->id) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Yakin hapus?')">Hapus</button>
+
+                                    <button type="submit"
+                                        class="btn btn-sm btn-danger"
+                                        onclick="return confirm('Yakin hapus?')">
+                                        Hapus
+                                    </button>
                                 </form>
                             </td>
                             @endif
                         </tr>
-                        @endforeach
+                        @empty
+                        <tr>
+                            <td colspan="{{ Auth::user()->role == 'admin' ? 6 : 5 }}" class="text-center">
+                                Data buku belum tersedia
+                            </td>
+                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
+
             </div>
         </div>
     </div>
